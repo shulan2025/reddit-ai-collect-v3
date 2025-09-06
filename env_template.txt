@@ -1,0 +1,26 @@
+# Reddit API 配置 (需要你申请)
+REDDIT_CLIENT_ID=your_reddit_client_id
+REDDIT_CLIENT_SECRET=your_reddit_client_secret
+REDDIT_USER_AGENT=Reddit_AI_Daily_Collector_v1.0
+
+# Cloudflare D1 数据库配置 (需要你申请)
+CLOUDFLARE_API_TOKEN=your_cloudflare_api_token
+CLOUDFLARE_ACCOUNT_ID=your_cloudflare_account_id
+D1_DATABASE_ID=your_d1_database_id
+
+# 采集配置
+DAILY_TARGET_POSTS=200
+COLLECTION_HOUR=6
+COLLECTION_TIMEZONE=Asia/Shanghai
+ENABLE_DAILY_DEDUP=true
+MAX_RETRIES=3
+RETRY_INTERVAL=300
+
+# 邮件发送配置 (可选 - 用于每日报告)
+SENDER_EMAIL=your.email@gmail.com
+SENDER_PASSWORD=your_app_specific_password
+
+# 调试配置
+DEBUG_MODE=false
+LOG_LEVEL=INFO
+ENABLE_CONSOLE_OUTPUT=true
