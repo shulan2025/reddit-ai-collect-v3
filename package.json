@@ -1,0 +1,51 @@
+{
+  "name": "reddit-ai-collect_v3",
+  "version": "3.0.0",
+  "description": "Reddit AI帖子采集器 v3.0 - 修复URL字段问题，完善帖子链接处理，支持增量更新和智能去重",
+  "main": "src/worker.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "./scripts/deploy.sh",
+    "deploy:quick": "wrangler deploy",
+    "build": "echo 'TypeScript build ready'",
+    "test": "jest",
+    "db:create": "wrangler d1 create reddit-ai-crawler",
+    "db:migrate": "wrangler d1 execute reddit-ai-crawler --file=database/migrations/0001_initial_schema.sql --remote && wrangler d1 execute reddit-ai-crawler --file=database/migrations/0002_create_indexes.sql --remote",
+    "db:migrate:local": "wrangler d1 execute reddit-ai-crawler --file=database/migrations/0001_initial_schema.sql --local && wrangler d1 execute reddit-ai-crawler --file=database/migrations/0002_create_indexes.sql --local",
+    "db:query": "wrangler d1 execute reddit-ai-crawler --command",
+    "db:stats": "wrangler d1 execute reddit-ai-crawler --command \"SELECT collection_date, COUNT(*) as posts FROM reddit_posts GROUP BY collection_date ORDER BY collection_date DESC LIMIT 10\"",
+    "tail": "wrangler tail",
+    "crawl:full": "node scripts/full-crawl-2000.js",
+    "crawl:incremental": "node scripts/incremental-crawl.js",
+    "crawl:trigger": "curl -X POST https://reddit-ai-crawler-v2.xiaoyan-chen222.workers.dev/crawl",
+    "health": "curl https://reddit-ai-crawler-v2.xiaoyan-chen222.workers.dev/health",
+    "status": "curl https://reddit-ai-crawler-v2.xiaoyan-chen222.workers.dev/status",
+    "stats": "curl https://reddit-ai-crawler-v2.xiaoyan-chen222.workers.dev/stats",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "keywords": [
+    "reddit",
+    "ai",
+    "crawler",
+    "cloudflare",
+    "workers",
+    "d1"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231218.0",
+    "@types/jest": "^29.5.8",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "eslint": "^8.54.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2",
+    "wrangler": "^3.114.14"
+  },
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20231218.0"
+  }
+}
