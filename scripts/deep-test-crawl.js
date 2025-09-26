@@ -238,18 +238,9 @@ class DeepTestCrawler {
         continue;
       }
 
-      // AI相关性检测
-      const aiKeywords = [
-        'ai', 'artificial intelligence', 'machine learning', 'deep learning', 
-        'neural network', 'gpt', 'llm', 'chatbot', 'openai', 'anthropic',
-        'claude', 'gemini', 'stable diffusion', 'midjourney', 'transformer'
-      ];
-
-      const titleLower = post.title.toLowerCase();
-      const textLower = (post.selftext || '').toLowerCase();
-      const isAIRelated = aiKeywords.some(keyword => 
-        titleLower.includes(keyword) || textLower.includes(keyword)
-      );
+      // ✅ 按用户要求修正：目标AI社区的帖子无需额外AI关键词过滤
+      // 既然是29个精选AI社区，其中符合质量标准的帖子都应该被采集
+      const isAIRelated = true; // AI社区的帖子默认AI相关
 
       const processedPost = {
         id: post.id,

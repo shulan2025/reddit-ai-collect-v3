@@ -118,24 +118,8 @@ class FullRedditCrawler {
         continue;
       }
 
-      // 检查AI相关性 (简单关键词匹配)
-      const aiKeywords = [
-        'ai', 'artificial intelligence', 'machine learning', 'deep learning', 
-        'neural network', 'gpt', 'llm', 'chatbot', 'openai', 'anthropic',
-        'claude', 'gemini', 'stable diffusion', 'midjourney', 'transformer',
-        'bert', 'nlp', 'computer vision', 'reinforcement learning', 'pytorch',
-        'tensorflow', 'hugging face', 'langchain', 'rag', 'fine-tuning'
-      ];
-
-      const titleLower = post.title.toLowerCase();
-      const textLower = (post.selftext || '').toLowerCase();
-      const isAIRelated = aiKeywords.some(keyword => 
-        titleLower.includes(keyword) || textLower.includes(keyword)
-      );
-
-      if (!isAIRelated && !TARGET_SUBREDDITS.includes(subreddit)) {
-        continue; // 非AI社区的帖子必须包含AI关键词
-      }
+      // ✅ 按用户要求修正：目标AI社区的帖子无需额外AI关键词过滤
+      // 既然是29个精选AI社区，其中符合质量标准的帖子都应该被采集
 
       const processedPost = {
         id: post.id,
