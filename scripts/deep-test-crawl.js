@@ -300,7 +300,7 @@ class DeepTestCrawler {
         const batch = this.collectedPosts.slice(i, i + batchSize);
         
         try {
-        let sql = 'INSERT OR REPLACE INTO redditV2_posts (id, subreddit, title, selftext, url, post_url, created_utc, collected_at, collection_date, collection_batch_id, author, score, num_comments, upvote_ratio, ups, downs, flair, awards, is_self, is_video, ai_relevance_score, is_ai_related) VALUES ';
+        let sql = 'INSERT OR IGNORE INTO redditV2_posts (id, subreddit, title, selftext, url, post_url, created_utc, collected_at, collection_date, collection_batch_id, author, score, num_comments, upvote_ratio, ups, downs, flair, awards, is_self, is_video, ai_relevance_score, is_ai_related) VALUES ';
         
         const values = batch.map(post => {
           const escapedTitle = post.title.replace(/'/g, "''").substring(0, 500);
