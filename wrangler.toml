@@ -1,11 +1,11 @@
-name = "reddit-ai-crawler-v2"
+name = "reddit-ai-collect-v3"
 main = "src/worker.ts"
-compatibility_date = "2023-12-01"
+compatibility_date = "2024-09-01"
 compatibility_flags = ["nodejs_compat"]
 
 # Cloudflare Workers配置
 [env.production]
-name = "reddit-ai-crawler-v2"
+name = "reddit-ai-collect-v3"
 
 # D1数据库绑定
 [[d1_databases]]

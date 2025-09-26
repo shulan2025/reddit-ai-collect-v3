@@ -1,0 +1,37 @@
+name: Simple Deploy Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Simple Cloudflare Deploy Test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test wrangler command
+        run: npx wrangler --version
+
+      - name: Deploy to Cloudflare Workers (Test)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --dry-run --minify
+
+      - name: Success message
+        run: |
+          echo "✅ 部署测试完成"
+          echo "如果看到这条消息，说明配置正确"
