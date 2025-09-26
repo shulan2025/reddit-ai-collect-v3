@@ -64,7 +64,7 @@ class IncrementalRedditCrawler {
       const existingIds = result.result[0]?.results?.map(row => row.id) || [];
       
       existingIds.forEach(id => this.existingPostIds.add(id));
-      console.log(`✅ 已加载 ${existingIds.length} 个今日已采集的帖子ID`);
+      console.log(`✅ 已加载 ${existingIds.length} 个当日已采集的帖子ID`);
       
       return true;
     } catch (error) {
@@ -224,7 +224,7 @@ class IncrementalRedditCrawler {
     console.log(`📋 社区数量: ${TARGET_SUBREDDITS.length}`);
     console.log('');
 
-    // 加载已存在的帖子ID
+    // 加载当日已采集的帖子ID (避免当日重复)
     await this.loadExistingPostIds();
 
     // 认证
