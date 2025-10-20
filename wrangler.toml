@@ -1,0 +1,37 @@
+name = "reddit-ai-collect-v4"
+main = "src/worker.ts"
+compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare Workers配置
+[env.production]
+name = "reddit-ai-collect-v4"
+
+# D1数据库绑定
+[[d1_databases]]
+binding = "DB"
+database_name = "reddit-ai-crawler"
+database_id = "3d1a2cff-14ac-49e7-9bfd-b4a5606c9712"
+
+# 环境变量
+[vars]
+ENVIRONMENT = "production"
+DAILY_LIMIT = "2000"
+MAX_POSTS_PER_REQUEST = "80"
+MIN_UPVOTE_RATIO = "0.1"
+API_REQUEST_INTERVAL = "1000"
+MAX_RETRIES = "3"
+
+# 密钥配置 (通过wrangler secret设置)
+# REDDIT_CLIENT_ID
+# REDDIT_CLIENT_SECRET
+# REDDIT_USER_AGENT
+# GOOGLE_AI_API_KEY
+
+# Cron触发器 - 每日北京时间10:00执行
+[triggers]
+crons = ["0 2 * * *"]
+
+# 资源限制 - 免费计划不支持CPU限制，注释掉
+# [limits]
+# cpu_ms = 30000

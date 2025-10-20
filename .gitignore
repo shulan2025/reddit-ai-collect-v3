@@ -1,44 +1,72 @@
-# 环境变量和敏感信息
-.env
-*.env
-env_local.txt
+# Reddit AI Collect v3.0 - Git忽略文件
 
-# Python 缓存文件
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
+# 依赖
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 环境变量
+.env
+.env.local
+.env.production
+.dev.vars
+
+# 临时数据文件
+data/*.json
+data/*.sql
+data/temp/
+data/backup/
+
+# 构建和缓存
+.wrangler/
+dist/
+build/
+.cache/
 
 # 日志文件
-*.log
 logs/
-
-# 数据导出文件
-exports/
-*.csv
-*.json
-
-# 临时文件
-*.tmp
-*.temp
-temp_*
-test_*
+*.log
 
 # 操作系统文件
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# IDE 文件
+# IDE文件
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+
+# 测试覆盖率
+coverage/
+.nyc_output/
+
+# 临时文件
+*.tmp
+*.temp
+temp/
+tmp/
 
 # 备份文件
 *.bak
 *.backup
 
-# 数据库文件（如果有本地数据库）
+# 敏感配置文件（如果有）
+config/local.json
+config/production.json
+secrets.json
+
+# Cloudflare相关
+wrangler.toml.backup
+
+# 数据库备份
 *.db
 *.sqlite
 *.sqlite3
