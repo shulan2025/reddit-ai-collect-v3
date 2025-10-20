@@ -4,14 +4,15 @@
 const fs = require('fs');
 const path = require('path');
 
-const REDDIT_CLIENT_ID = 'NJnkQLyA6Gie7rGvCI3zYg';
-const REDDIT_CLIENT_SECRET = 'WHFMSNNZBt1gV5xC394LGhrr5LzyPQ';
-const USER_AGENT = 'reddit-ai-crawler/1.0.0 (by /u/ai_researcher)';
+// 从环境变量获取配置
+const REDDIT_CLIENT_ID = process.env.REDDIT_CLIENT_ID;
+const REDDIT_CLIENT_SECRET = process.env.REDDIT_CLIENT_SECRET;
+const USER_AGENT = process.env.REDDIT_USER_AGENT || 'script:re_ai_collector_v4:v4.0.0 (by /u/shulan22)';
 
 // Cloudflare D1 API配置
-const CLOUDFLARE_API_TOKEN = 'WLzJ5DaoyobRPli3uwKcdLZkNrzzwfGGQIjbMsqU';
-const ACCOUNT_ID = 'e23dc8a212c55fe9210b99f24be11eb9';
-const DATABASE_ID = '3d1a2cff-14ac-49e7-9bfd-b4a5606c9712';
+const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
+const ACCOUNT_ID = process.env.ACCOUNT_ID;
+const DATABASE_ID = process.env.DATABASE_ID;
 
 // 29个AI相关社区
 const TARGET_SUBREDDITS = [
@@ -25,6 +26,9 @@ const TARGET_SUBREDDITS = [
 
 class IncrementalRedditCrawler {
   constructor() {
+    // 验证必需的环境变量
+    this.validateEnvironment();
+    
     this.accessToken = null;
     this.existingPostIds = new Set();
     this.newPosts = [];
@@ -42,6 +46,30 @@ class IncrementalRedditCrawler {
       'Authorization': `Bearer ${CLOUDFLARE_API_TOKEN}`,
       'Content-Type': 'application/json'
     };
+  }
+
+  validateEnvironment() {
+    const requiredEnvVars = [
+      'REDDIT_CLIENT_ID',
+      'REDDIT_CLIENT_SECRET', 
+      'CLOUDFLARE_API_TOKEN',
+      'ACCOUNT_ID',
+      'DATABASE_ID'
+    ];
+
+    const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+    
+    if (missingVars.length > 0) {
+      console.error('❌ 缺少必需的环境变量:');
+      missingVars.forEach(varName => {
+        console.error(`   - ${varName}`);
+      });
+      console.error('');
+      console.error('请确保在GitHub Actions中正确配置了所有secrets。');
+      throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+    }
+
+    console.log('✅ 环境变量验证通过');
   }
 
   async loadExistingPostIds() {
