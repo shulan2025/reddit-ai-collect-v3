@@ -475,12 +475,17 @@ async function main() {
     const success = await crawler.crawlIncrementally(1000);
     if (success) {
       await crawler.insertNewPosts();
-      // 无论是否有新数据，都保存结果以供Actions上传
-      await crawler.saveResults();
-      crawler.printSummary();
     }
   } catch (error) {
     console.error('❌ 增量采集过程中出现错误:', error);
+  } finally {
+    // 始终输出结果文件与总结，便于排查
+    try {
+      await crawler.saveResults();
+    } catch (e) {
+      console.error('❌ 保存结果文件失败:', e);
+    }
+    crawler.printSummary();
   }
 }
 
