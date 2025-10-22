@@ -380,26 +380,22 @@ class IncrementalRedditCrawler {
   }
 
   async saveResults() {
-    if (this.newPosts.length === 0) {
-      console.log('📭 没有新数据需要保存');
-      return null;
-    }
-
+    // 始终生成数据目录与统计文件，便于Actions上传产物
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const dataDir = path.join(__dirname, '..', 'data');
-    
-    // 确保数据目录存在
+
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
 
-    // 保存新帖子数据
+    // 保存统计数据（即使没有新帖子也会写入）
+    const statsFile = path.join(dataDir, `crawl-stats-incremental-${timestamp}.json`);
+    const statsPayload = { ...this.stats, savedAt: Date.now() };
+    fs.writeFileSync(statsFile, JSON.stringify(statsPayload, null, 2));
+
+    // 保存帖子数据（可能为空数组）
     const postsFile = path.join(dataDir, `reddit-posts-incremental-${timestamp}.json`);
     fs.writeFileSync(postsFile, JSON.stringify(this.newPosts, null, 2));
-
-    // 保存统计数据
-    const statsFile = path.join(dataDir, `crawl-stats-incremental-${timestamp}.json`);
-    fs.writeFileSync(statsFile, JSON.stringify(this.stats, null, 2));
 
     console.log('');
     console.log('💾 增量数据保存完成:');
@@ -478,10 +474,9 @@ async function main() {
   try {
     const success = await crawler.crawlIncrementally(1000);
     if (success) {
-      const insertResult = await crawler.insertNewPosts();
-      if (insertResult.successCount > 0) {
-        await crawler.saveResults();
-      }
+      await crawler.insertNewPosts();
+      // 无论是否有新数据，都保存结果以供Actions上传
+      await crawler.saveResults();
       crawler.printSummary();
     }
   } catch (error) {
